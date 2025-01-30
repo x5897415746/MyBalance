@@ -19,6 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import io.github.x5897415746.mybalance.databinding.ActivityMainBinding;
 import io.github.x5897415746.mybalance.util.NfcTechFilterXmlParser;
+import io.github.x5897415746.mybalance.util.StringUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction()) || NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             Log.w(LOG_TAG, intent.getAction());
             Tag nfcTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            Log.w(LOG_TAG, "Found a tag: " + bytesToHex(nfcTag.getId()));
+            byte[] tagId = nfcTag.getId();
+            Log.w(LOG_TAG, "Found a tag. ID: " + (tagId == null ? "(null)" : StringUtil.bytesToHex(tagId)));
             Log.w(LOG_TAG, nfcTag.toString());
         }
     }
@@ -104,12 +106,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : bytes) {
-            hexString.append(String.format("%02X", b));
-        }
-        return hexString.toString();
-    }
+
 
 }
