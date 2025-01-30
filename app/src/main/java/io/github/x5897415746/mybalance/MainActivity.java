@@ -2,6 +2,7 @@ package io.github.x5897415746.mybalance;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import io.github.x5897415746.mybalance.databinding.ActivityMainBinding;
+import io.github.x5897415746.mybalance.util.NfcTechFilterXmlParser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -89,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 0,
                 new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
                 PendingIntent.FLAG_MUTABLE);
-        nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        String[][] techLists = NfcTechFilterXmlParser.parse(getApplicationContext());
+        IntentFilter intentFilter = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
+        nfcAdapter.enableForegroundDispatch(this, pendingIntent, new IntentFilter[]{intentFilter}, techLists);
         return true;
     }
 
